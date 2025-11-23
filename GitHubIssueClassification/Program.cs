@@ -46,6 +46,7 @@ var trainingPipeline = pipeline.Append(mlContext.MulticlassClassification.Traine
 Console.WriteLine("=============== Cross-validating to get model's accuracy metrics ===============");
 var crossValidationResults = mlContext.MulticlassClassification.CrossValidate(trainingDataView, trainingPipeline, 6);
 ConsoleHelper.PrintMulticlassClassificationFoldsAverageMetrics(trainingPipeline.ToString(), crossValidationResults);
+Console.WriteLine("=============== Finished Cross-validating to get model's accuracy metrics ===============");
 Console.WriteLine("=============== Finished Create the training algorithm/trainer  ===============");
 
 // STEP 4: Train the model by fitting to the dataset
