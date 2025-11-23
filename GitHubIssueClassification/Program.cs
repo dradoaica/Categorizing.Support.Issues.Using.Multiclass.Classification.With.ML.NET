@@ -40,8 +40,28 @@ Console.WriteLine("=============== Finished Processing Data ===============");
 // Use the multi-class SDCA algorithm to predict the label using features.
 // Set the trainer/algorithm and map label sto value (original readable state).
 Console.WriteLine("=============== Create the training algorithm/trainer  ===============");
-var trainingPipeline = pipeline.Append(mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy())
-    .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+IEstimator<ITransformer> trainer = null;
+const int selectedStrategy = 0; // 0: SDCA Maximum Entropy, 1: OVA with Averaged Perceptron
+switch (selectedStrategy)
+{
+    case 0:
+        trainer = mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy();
+        break;
+    case 1:
+        {
+            // Create a binary classification trainer.
+            var averagedPerceptronBinaryTrainer = mlContext.BinaryClassification.Trainers.AveragedPerceptron();
+            // Compose an OVA (One-Versus-All) trainer with the BinaryTrainer.
+            // In this strategy, a binary classification algorithm is used to train one classifier for each class,
+            // which distinguishes that class from all other classes. Prediction is then performed by running these binary classifiers,
+            // and choosing the prediction with the highest confidence score.
+            trainer = mlContext.MulticlassClassification.Trainers.OneVersusAll(averagedPerceptronBinaryTrainer);
+
+            break;
+        }
+}
+
+var trainingPipeline = pipeline.Append(trainer).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
 // (OPTIONAL) Cross-Validate with training dataset in order to evaluate and get the model's accuracy metrics.
 Console.WriteLine("=============== Cross-validating to get model's accuracy metrics ===============");
 var crossValidationResults = mlContext.MulticlassClassification.CrossValidate(trainingDataView, trainingPipeline, 6);
@@ -51,7 +71,7 @@ Console.WriteLine("=============== Finished Create the training algorithm/traine
 
 // STEP 4: Train the model by fitting to the dataset
 Console.WriteLine("=============== Training the model  ===============");
-ITransformer model = trainingPipeline.Fit(trainingDataView);
+var model = trainingPipeline.Fit(trainingDataView);
 // (OPTIONAL) Try/test a single prediction with the "just-trained model" (before saving the model).
 Console.WriteLine("=============== Single Prediction just-trained-model ===============");
 // Create prediction engine related to the loaded trained model.
