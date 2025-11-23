@@ -62,7 +62,9 @@ var issue = new GitHubIssue
         "The WebSockets communication used under the covers by SignalR looks like is going slow in my development machine..",
 };
 var prediction = predictionEngine.Predict(issue);
-Console.WriteLine($"=============== Single Prediction just-trained-model - Result: {prediction.Area} ===============");
+Console.WriteLine(
+    $"=============== Finished Single Prediction just-trained-model - Result: {prediction.Area} ==============="
+);
 Console.WriteLine(
     $"=============== Finished Training the model Ending time: {DateTime.Now.ToString()} ==============="
 );
@@ -86,6 +88,7 @@ Console.WriteLine($"=============== Finished Saving the model to {modelPath} ===
 // STEP 7: Load the model from .ZIP file, and try a single prediction
 Console.WriteLine($"=============== Loading the model from {modelPath}, and try a single prediction ===============");
 var loadedModel = mlContext.Model.Load(modelPath, out _);
+Console.WriteLine($"=============== Single Prediction - Result: {prediction.Area} ===============");
 var singleIssue = new GitHubIssue
 {
     Title = "Entity Framework crashes",
@@ -94,7 +97,7 @@ var singleIssue = new GitHubIssue
 // Predict label for single hard-coded issue.
 predictionEngine = mlContext.Model.CreatePredictionEngine<GitHubIssue, IssuePrediction>(loadedModel);
 prediction = predictionEngine.Predict(singleIssue);
-Console.WriteLine($"=============== Single Prediction - Result: {prediction.Area} ===============");
+Console.WriteLine($"=============== Finished Single Prediction - Result: {prediction.Area} ===============");
 Console.WriteLine(
     $"=============== Finished Loading the model from {modelPath}, and try a single prediction ==============="
 );
