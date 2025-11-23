@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2022 Radoaica Danut Cosmin
+Copyright (c) 2025 Radoaica Danut Cosmin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
