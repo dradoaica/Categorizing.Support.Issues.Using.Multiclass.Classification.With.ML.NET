@@ -5,8 +5,11 @@ using static Microsoft.ML.TrainCatalogBase;
 
 namespace GitHubIssueClassification.Common;
 
+/// <summary>Provides helper methods for console output and metrics display.</summary>
 public static class ConsoleHelper
 {
+    /// <summary>Prints the prediction result to the console.</summary>
+    /// <param name="prediction">The predicted value.</param>
     public static void PrintPrediction(string prediction)
     {
         Console.WriteLine("*************************************************");
@@ -14,6 +17,9 @@ public static class ConsoleHelper
         Console.WriteLine("*************************************************");
     }
 
+    /// <summary>Prints the regression prediction versus the observed value.</summary>
+    /// <param name="predictionCount">The predicted count.</param>
+    /// <param name="observedCount">The actual observed count.</param>
     public static void PrintRegressionPredictionVersusObserved(string predictionCount, string observedCount)
     {
         Console.WriteLine("-------------------------------------------------");
@@ -22,6 +28,9 @@ public static class ConsoleHelper
         Console.WriteLine("-------------------------------------------------");
     }
 
+    /// <summary>Prints regression metrics to the console.</summary>
+    /// <param name="name">The name of the model.</param>
+    /// <param name="metrics">The regression metrics.</param>
     public static void PrintRegressionMetrics(string name, RegressionMetrics metrics)
     {
         Console.WriteLine("*************************************************");
@@ -35,6 +44,9 @@ public static class ConsoleHelper
         Console.WriteLine("*************************************************");
     }
 
+    /// <summary>Prints binary classification metrics to the console.</summary>
+    /// <param name="name">The name of the model.</param>
+    /// <param name="metrics">The binary classification metrics.</param>
     public static void PrintBinaryClassificationMetrics(string name, CalibratedBinaryClassificationMetrics metrics)
     {
         Console.WriteLine("************************************************************");
@@ -53,6 +65,9 @@ public static class ConsoleHelper
         Console.WriteLine("************************************************************");
     }
 
+    /// <summary>Prints anomaly detection metrics to the console.</summary>
+    /// <param name="name">The name of the model.</param>
+    /// <param name="metrics">The anomaly detection metrics.</param>
     public static void PrintAnomalyDetectionMetrics(string name, AnomalyDetectionMetrics metrics)
     {
         Console.WriteLine("************************************************************");
@@ -65,6 +80,9 @@ public static class ConsoleHelper
         Console.WriteLine("************************************************************");
     }
 
+    /// <summary>Prints multi-class classification metrics to the console.</summary>
+    /// <param name="name">The name of the model.</param>
+    /// <param name="metrics">The multi-class classification metrics.</param>
     public static void PrintMultiClassClassificationMetrics(string name, MulticlassClassificationMetrics metrics)
     {
         Console.WriteLine("************************************************************");
@@ -77,18 +95,20 @@ public static class ConsoleHelper
             $"    AccuracyMicro = {metrics.MicroAccuracy:0.####}, a value between 0 and 1, the closer to 1, the better"
         );
         Console.WriteLine($"    LogLoss = {metrics.LogLoss:0.####}, the closer to 0, the better");
-        Console.WriteLine(
-            $"    LogLoss for class 1 = {metrics.PerClassLogLoss[0]:0.####}, the closer to 0, the better"
-        );
-        Console.WriteLine(
-            $"    LogLoss for class 2 = {metrics.PerClassLogLoss[1]:0.####}, the closer to 0, the better"
-        );
-        Console.WriteLine(
-            $"    LogLoss for class 3 = {metrics.PerClassLogLoss[2]:0.####}, the closer to 0, the better"
-        );
+
+        for (var i = 0; i < metrics.PerClassLogLoss.Count; i++)
+        {
+            Console.WriteLine(
+                $"    LogLoss for class {i + 1} = {metrics.PerClassLogLoss[i]:0.####}, the closer to 0, the better"
+            );
+        }
+
         Console.WriteLine("************************************************************");
     }
 
+    /// <summary>Prints regression folds average metrics.</summary>
+    /// <param name="algorithmName">The name of the algorithm.</param>
+    /// <param name="crossValidationResults">The cross-validation results.</param>
     public static void PrintRegressionFoldsAverageMetrics(
         string algorithmName,
         IReadOnlyList<CrossValidationResult<RegressionMetrics>> crossValidationResults
@@ -117,6 +137,9 @@ public static class ConsoleHelper
         );
     }
 
+    /// <summary>Prints multi-class classification folds average metrics.</summary>
+    /// <param name="algorithmName">The name of the algorithm.</param>
+    /// <param name="crossValResults">The cross-validation results.</param>
     public static void PrintMulticlassClassificationFoldsAverageMetrics(
         string algorithmName,
         IReadOnlyList<CrossValidationResult<MulticlassClassificationMetrics>> crossValResults
@@ -168,6 +191,9 @@ public static class ConsoleHelper
         );
     }
 
+    /// <summary>Calculates the standard deviation of a sequence of values.</summary>
+    /// <param name="values">The sequence of values.</param>
+    /// <returns>The standard deviation.</returns>
     public static double CalculateStandardDeviation(IEnumerable<double> values)
     {
         var average = values.Average();
@@ -176,12 +202,18 @@ public static class ConsoleHelper
         return standardDeviation;
     }
 
+    /// <summary>Calculates the 95% confidence interval of a sequence of values.</summary>
+    /// <param name="values">The sequence of values.</param>
+    /// <returns>The 95% confidence interval.</returns>
     public static double CalculateConfidenceInterval95(IEnumerable<double> values)
     {
         var confidenceInterval95 = 1.96 * CalculateStandardDeviation(values) / Math.Sqrt(values.Count() - 1);
         return confidenceInterval95;
     }
 
+    /// <summary>Prints clustering metrics to the console.</summary>
+    /// <param name="name">The name of the model.</param>
+    /// <param name="metrics">The clustering metrics.</param>
     public static void PrintClusteringMetrics(string name, ClusteringMetrics metrics)
     {
         Console.WriteLine("*************************************************");
@@ -192,6 +224,10 @@ public static class ConsoleHelper
         Console.WriteLine("*************************************************");
     }
 
+    /// <summary>Shows the data in the DataView in the console.</summary>
+    /// <param name="mlContext">The ML context.</param>
+    /// <param name="dataView">The data view.</param>
+    /// <param name="numberOfRows">The number of rows to show.</param>
     public static void ShowDataViewInConsole(MLContext mlContext, IDataView dataView, int numberOfRows = 4)
     {
         var msg = string.Format("Show data in DataView: Showing {0} rows with the columns", numberOfRows.ToString());
@@ -212,6 +248,11 @@ public static class ConsoleHelper
         }
     }
 
+    /// <summary>Peeks at the data in the DataView in the console.</summary>
+    /// <param name="mlContext">The ML context.</param>
+    /// <param name="dataView">The data view.</param>
+    /// <param name="pipeline">The pipeline.</param>
+    /// <param name="numberOfRows">The number of rows to show.</param>
     [Conditional("DEBUG")]
     // This method using 'DebuggerExtensions.Preview()' should only be used when debugging/developing, not for release/production trainings
     public static void PeekDataViewInConsole(
@@ -246,6 +287,12 @@ public static class ConsoleHelper
         }
     }
 
+    /// <summary>Peeks at the vector column data in the DataView in the console.</summary>
+    /// <param name="mlContext">The ML context.</param>
+    /// <param name="columnName">The column name.</param>
+    /// <param name="dataView">The data view.</param>
+    /// <param name="pipeline">The pipeline.</param>
+    /// <param name="numberOfRows">The number of rows to show.</param>
     [Conditional("DEBUG")]
     // This method using 'DebuggerExtensions.Preview()' should only be used when debugging/developing, not for release/production trainings
     public static void PeekVectorColumnDataInConsole(
@@ -290,6 +337,8 @@ public static class ConsoleHelper
         );
     }
 
+    /// <summary>Writes a header to the console.</summary>
+    /// <param name="lines">The lines to write.</param>
     public static void ConsoleWriteHeader(params string[] lines)
     {
         var defaultColor = Console.ForegroundColor;
@@ -305,6 +354,8 @@ public static class ConsoleHelper
         Console.ForegroundColor = defaultColor;
     }
 
+    /// <summary>Writes a section header to the console.</summary>
+    /// <param name="lines">The lines to write.</param>
     public static void ConsoleWriterSection(params string[] lines)
     {
         var defaultColor = Console.ForegroundColor;
@@ -320,6 +371,7 @@ public static class ConsoleHelper
         Console.ForegroundColor = defaultColor;
     }
 
+    /// <summary>Waits for the user to press any key.</summary>
     public static void ConsolePressAnyKey()
     {
         var defaultColor = Console.ForegroundColor;
@@ -329,6 +381,8 @@ public static class ConsoleHelper
         Console.ReadKey();
     }
 
+    /// <summary>Writes an exception to the console.</summary>
+    /// <param name="lines">The lines to write.</param>
     public static void ConsoleWriteException(params string[] lines)
     {
         var defaultColor = Console.ForegroundColor;
@@ -344,6 +398,8 @@ public static class ConsoleHelper
         }
     }
 
+    /// <summary>Writes a warning to the console.</summary>
+    /// <param name="lines">The lines to write.</param>
     public static void ConsoleWriteWarning(params string[] lines)
     {
         var defaultColor = Console.ForegroundColor;
