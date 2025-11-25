@@ -24,21 +24,17 @@ multi-class classification model.
 - **GitHubIssueClassification**: The main console application.
     - **Data**: Contains training (`issues_train.tsv`) and test (`issues_test.tsv`) datasets.
     - **Models**: Stores the trained model (`model.zip`).
-    - **Common**: Helper classes for console output.
+    - **Common**: Helper methods for formatting console output.
     - `Program.cs`: The entry point and main logic.
     - `GitHubIssueData.cs`: Data models for input and prediction.
 
 ## How to Run
 
-1. Clone the repository.
-2. Navigate to the `GitHubIssueClassification` directory.
-3. Run the application using the .NET CLI:
+1. **Open the Solution**: Open `GitHubIssueClassification.slnx` or the project folder in your IDE.
+2. **Restore Dependencies**: Run `dotnet restore` to install the required NuGet packages.
+3. **Run the Application**: Run the application using your IDE or `dotnet run`.
 
-   ```bash
-   dotnet run
-   ```
-
-## Code Overview
+## How it Works
 
 The `Program.cs` file follows these steps:
 
