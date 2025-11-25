@@ -2,12 +2,16 @@
 
 ## Overview
 
-The application trains a machine learning model using the **SDCA Maximum Entropy** algorithm to classify issues based on
-their **Title** and **Description**.
+The application `GitHubIssueClassification` trains a machine learning model using the **SDCA Maximum Entropy** or the
+**OVA with Averaged Perceptron** algorithm to classify issues based on their **Title** and **Description**.
 
 | ML.NET version | API type    | Status     | App Type    | Data sources                | Scenario              | ML Task                    | Algorithms                  |
 |----------------|-------------|------------|-------------|-----------------------------|-----------------------|----------------------------|-----------------------------|
 | v5.0.0         | Dynamic API | Up-to-date | Console app | .tsv file and GitHub issues | Issues classification | Multi-class classification | SDCA multi-class classifier |
+
+For a detailed explanation of how to build this application, see the
+accompanying [tutorial](https://learn.microsoft.com/en-us/dotnet/machine-learning/tutorials/github-issue-classification)
+on the Microsoft Docs site.
 
 ## Prerequisites
 
@@ -22,11 +26,11 @@ multi-class classification model.
 ## Project Structure
 
 - **GitHubIssueClassification**: The main console application.
+    - **Common**: Helper methods for formatting console output.
     - **Data**: Contains training (`issues_train.tsv`) and test (`issues_test.tsv`) datasets.
     - **Models**: Stores the trained model (`model.zip`).
-    - **Common**: Helper methods for formatting console output.
-    - `Program.cs`: The entry point and main logic.
     - `GitHubIssueData.cs`: Data models for input and prediction.
+    - `Program.cs`: The main entry point.
 
 ## How to Run
 
@@ -35,8 +39,6 @@ multi-class classification model.
 3. **Run the Application**: Run the application using your IDE or `dotnet run`.
 
 ## How it Works
-
-The `Program.cs` file follows these steps:
 
 1. **Load Data**: Loads training and test data from TSV files.
 2. **Process Data**: Transforms text data (Title, Description) into numeric features and maps labels to keys.
