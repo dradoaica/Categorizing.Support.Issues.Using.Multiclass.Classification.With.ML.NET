@@ -1,8 +1,5 @@
 # GitHub Issue Classification with ML.NET
 
-This project demonstrates how to use ML.NET to categorize GitHub issues into different areas (labels) using a
-multi-class classification model.
-
 ## Overview
 
 The application trains a machine learning model using the **SDCA Maximum Entropy** algorithm to classify issues based on
@@ -16,6 +13,11 @@ their **Title** and **Description**.
 
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later.
 - Visual Studio 2026 or VS Code.
+
+## Problem
+
+This project demonstrates how to use ML.NET to categorize GitHub issues into different areas (labels) using a
+multi-class classification model.
 
 ## Project Structure
 
